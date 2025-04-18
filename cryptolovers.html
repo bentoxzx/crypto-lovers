@@ -99,6 +99,12 @@
       <a href="#contact">Kontak</a>
     </nav>
   </header>
+<section id="crypto-prices" style="text-align: center; margin-top: 50px;">
+  <h2>Live Crypto Prices</h2>
+  <div id="price-btc">Loading BTC price...</div>
+  <div id="price-eth">Loading ETH price...</div>
+</section>
+
 
   <section class="hero">
     <h2>Crypto Info Terbaru & Terpercaya</h2>
@@ -130,4 +136,25 @@
     <p>&copy; 2025 Crypto Lovers. All rights reserved.</p>
   </footer>
 </body>
+<script>
+  async function fetchCryptoPrices() {
+    try {
+      const response = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd");
+      const data = await response.json();
+
+      document.getElementById("price-btc").innerText = `Bitcoin (BTC): $${data.bitcoin.usd.toLocaleString()}`;
+      document.getElementById("price-eth").innerText = `Ethereum (ETH): $${data.ethereum.usd.toLocaleString()}`;
+    } catch (error) {
+      console.error("Error fetching crypto prices:", error);
+      document.getElementById("crypto-prices").innerText = "Gagal memuat data harga 😢";
+    }
+  }
+
+  // Jalankan saat halaman load
+  fetchCryptoPrices();
+
+  // Update setiap 30 detik
+  setInterval(fetchCryptoPrices, 30000);
+</script>
+
 </html>
